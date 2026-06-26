@@ -1,0 +1,55 @@
+{
+  "name": "n8n-nodes-scorechain",
+  "version": "1.0.1",
+  "description": "n8n community node for Scorechain Risk Scoring API — analyse crypto addresses and transactions on 20+ blockchains",
+  "keywords": [
+    "n8n-community-node-package",
+    "scorechain",
+    "crypto",
+    "blockchain",
+    "risk",
+    "aml",
+    "compliance",
+    "scoring"
+  ],
+  "license": "MIT",
+  "homepage": "https://scorechain.com",
+  "author": {
+    "name": "Scorechain",
+    "url": "https://scorechain.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scorechain/n8n-nodes-scorechain.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scorechain/n8n-nodes-scorechain/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && cp nodes/Scorechain/scorechain.svg dist/nodes/Scorechain/scorechain.svg",
+    "lint": "eslint nodes credentials package.json",
+    "prepublishOnly": "npm run build && npm run lint"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/ScorechainApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Scorechain/Scorechain.node.js"
+    ]
+  },
+  "files": [
+    "dist",
+    "index.js"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-n8n-nodes-base": "^1.16.7",
+    "jsonc-eslint-parser": "^2.4.2",
+    "n8n-workflow": "^2.16.0",
+    "typescript": "^6.0.3"
+  }
+}

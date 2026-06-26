@@ -1,0 +1,12 @@
+stages:
+  - test
+
+lint:
+  stage: test
+  image: node:24-alpine
+  tags:
+    - docker
+  script:
+    - npm ci --ignore-scripts
+    - npm run build
+    - npm run lint
