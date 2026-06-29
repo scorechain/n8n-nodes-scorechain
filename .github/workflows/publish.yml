@@ -1,0 +1,34 @@
+name: Publish to npm (with provenance)
+
+# Publishes the package to npm with a provenance attestation, required for the
+# n8n verified community-nodes program. Uses npm Trusted Publishing (OIDC) — no
+# NPM token is stored; auth and provenance come from the trusted-publisher
+# config on npmjs.com for this repo + workflow. Trigger by pushing a version
+# tag (e.g. v1.0.1) or manually via "Run workflow".
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # OIDC token used by npm for Trusted Publishing + provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      # Trusted Publishing (OIDC) requires npm >= 11.5.1.
+      - run: npm install -g npm@latest
+      # --ignore-scripts skips the native build of isolated-vm (a transitive
+      # dev dependency we never run); we only need the TypeScript types.
+      - run: npm ci --ignore-scripts
+      # No NODE_AUTH_TOKEN: auth + provenance come from the OIDC trusted
+      # publisher. npm publish runs prepublishOnly (build + lint) before packing.
+      - run: npm publish --provenance --access public
